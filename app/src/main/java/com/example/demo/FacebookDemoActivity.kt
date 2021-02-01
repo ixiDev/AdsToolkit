@@ -3,6 +3,8 @@ package com.example.demo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.facebook.ads.AdSettings
+import com.facebook.ads.AudienceNetworkAds
 import com.ixidev.adstoolkit.core.IBannerAd
 import com.ixidev.adstoolkit.facebook.SimpleFacebookBannerAd
 
@@ -12,6 +14,8 @@ class FacebookDemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_facebook_demo)
+        AudienceNetworkAds.initialize(this)
+        AdSettings.addTestDevice("5211dd89-8793-4516-a5e7-8583bc4aaedf")
         initBanner()
     }
 

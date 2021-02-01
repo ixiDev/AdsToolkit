@@ -42,6 +42,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation project(path: ':core')
-    implementation 'com.facebook.android:audience-network-sdk:6.2.0'
-    implementation 'com.facebook.android:facebook-android-sdk:6.2.0'
+    api 'com.facebook.android:audience-network-sdk:6.2.0'
+    api 'com.facebook.android:facebook-android-sdk:6.2.0'
 }
