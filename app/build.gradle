@@ -12,7 +12,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "${AdsToolkit_VERSION}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:19.7.0'
 
     implementation project(path: ':core')
-    implementation project(path: ':admob')
-    implementation project(path: ':facebook')
+    implementation 'com.github.ixiDev.AdsToolkit:core:0.0.2'
+    implementation 'com.github.ixiDev.AdsToolkit:admob:0.0.2'
+    implementation 'com.github.ixiDev.AdsToolkit:facebook:0.0.2'
 }
