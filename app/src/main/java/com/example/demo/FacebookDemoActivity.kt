@@ -8,13 +8,16 @@ import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
 import com.ixidev.adstoolkit.core.IBannerAd
 import com.ixidev.adstoolkit.core.IInterstitialAd
+import com.ixidev.adstoolkit.core.INativeAd
 import com.ixidev.adstoolkit.facebook.SimpleFacebookBannerAd
 import com.ixidev.adstoolkit.facebook.SimpleFacebookInterstitialAd
+import com.ixidev.adstoolkit.facebook.SimpleFacebookNativeAd
 
 class FacebookDemoActivity : AppCompatActivity() {
 
     private lateinit var banner: IBannerAd
     private lateinit var interstitialAd: IInterstitialAd
+    private lateinit var nativeAd: INativeAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,12 @@ class FacebookDemoActivity : AppCompatActivity() {
         AdSettings.addTestDevice("5211dd89-8793-4516-a5e7-8583bc4aaedf")
         initBanner()
         initFullScreenAd()
+        initNativeAd()
+    }
+
+    private fun initNativeAd() {
+        nativeAd = SimpleFacebookNativeAd(findViewById(R.id.fb_simple_native_ad))
+        nativeAd.load(this, "1444710325874143_1444720032539839")
     }
 
     private fun initFullScreenAd() {

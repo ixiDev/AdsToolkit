@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AdsToolkit</string>
+    <string name="show_interstitial_ad">Show Interstitial Ad</string>
 </resources>

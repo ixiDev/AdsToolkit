@@ -2,22 +2,20 @@ package com.ixidev.adstoolkit.facebook
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.isVisible
 import com.facebook.ads.*
 import com.ixidev.adstoolkit.core.AdsToolkit
 import com.ixidev.adstoolkit.core.INativeAd
+import com.ixidev.adstoolkit.core.hide
+import com.ixidev.adstoolkit.core.show
 
 /**
  * Created by ABDELMAJID ID ALI on 1/23/21.
  * Email : abdelmajid.idali@gmail.com
  * Github : https://github.com/ixiDev
  */
-class SimpleFacebookNativeAd : INativeAd {
+class SimpleFacebookNativeAd(private val container: FrameLayout) : INativeAd {
 
     private var nativeAdLayout: NativeAdLayout? = null
     private var nativeAd: NativeAd? = null
@@ -46,6 +44,7 @@ class SimpleFacebookNativeAd : INativeAd {
                     return
                 }
                 adLoaded = true
+                render(container)
             }
 
             override fun onAdClicked(p0: Ad?) {
@@ -72,13 +71,13 @@ class SimpleFacebookNativeAd : INativeAd {
 
     override fun render(container: FrameLayout) {
         if (!adLoaded) {
-            nativeAdLayout?.isVisible = false
+            nativeAdLayout?.hide()
             return
         }
         nativeAd!!.unregisterView()
 
         nativeAdLayout = container.findViewById(R.id.native_ad_container)
-        nativeAdLayout?.isVisible = true
+        nativeAdLayout?.show()
 
         val inflater = LayoutInflater.from(container.context)
 
@@ -89,7 +88,7 @@ class SimpleFacebookNativeAd : INativeAd {
 
         val adView = FbHolderAdView(adViewLayout)
 
-        nativeAdLayout!!.addView(adView.root)
+        nativeAdLayout!!.addView(adViewLayout)
 
         adView.bind(container.context, nativeAd!!, nativeAdLayout!!)
 
@@ -107,41 +106,5 @@ class SimpleFacebookNativeAd : INativeAd {
     }
 
 
-    class FbHolderAdView(val root: View) {
-        // Create native UI using the ad metadata.
-        val nativeAdIcon: MediaView = root.findViewById(R.id.native_ad_icon)
-        val nativeAdMedia: MediaView = root.findViewById(R.id.native_ad_media)
-        private val nativeAdTitle: TextView = root.findViewById(R.id.native_ad_title)
-        private val nativeAdSocialContext: TextView =
-            root.findViewById(R.id.native_ad_social_context)
-        private val nativeAdBody: TextView = root.findViewById(R.id.native_ad_body)
-        private val sponsoredLabel: TextView = root.findViewById(R.id.native_ad_sponsored_label)
-        private val nativeAdCallToAction: Button = root.findViewById(R.id.native_ad_call_to_action)
-        private val adChoicesContainer: LinearLayout = root.findViewById(R.id.ad_choices_container)
 
-        fun bind(context: Context, nativeAd: NativeAd, nativeAdLayout: NativeAdLayout) {
-            // Add the AdOptionsView
-            val adOptionsView = AdOptionsView(context, nativeAd, nativeAdLayout)
-            adChoicesContainer.removeAllViews()
-            adChoicesContainer.addView(adOptionsView, 0)
-
-            // Set the Text.
-            nativeAdTitle.text = nativeAd.advertiserName
-            nativeAdBody.text = nativeAd.adBodyText
-            nativeAdSocialContext.text = nativeAd.adSocialContext
-            nativeAdCallToAction.visibility =
-                if (nativeAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-            nativeAdCallToAction.text = nativeAd.adCallToAction
-            sponsoredLabel.text = nativeAd.sponsoredTranslation
-        }
-
-        fun clickableViews(): MutableList<View> {
-            return mutableListOf(
-                nativeAdTitle,
-                nativeAdCallToAction,
-                nativeAdBody
-            )
-        }
-
-    }
 }
