@@ -38,7 +38,7 @@ android {
                     from components.release
                     groupId = 'com.github.ixiDevt.AdsToolkit'
                     artifactId = 'facebook'
-                    version = '1.0'
+                    version = "${AdsToolkit_VERSION}"
                     artifact('facebook') {
                         classifier = "$buildDir/outputs/aar/facebook-release.aar"
                         extension = 'aar'
