@@ -34,12 +34,21 @@ android {
     afterEvaluate {
         publishing {
             publications {
-                release(MavenPublication) {
+                AndroidRelease(MavenPublication) {
                     from components.release
                     groupId = 'com.ixidev.adstoolkit'
                     artifactId = 'facebook'
                     version = '1.0'
+                    artifact('facebook-release') {
+                        classifier = "$buildDir/outputs/aar/facebook-release.aar"
+                        extension = 'aar'
 
+                    }
+                }
+            }
+            repositories {
+                mavenLocal{
+                    url =System.getProperty("user.home") + "/.m2/repository"
                 }
             }
         }
