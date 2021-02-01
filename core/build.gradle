@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
+
 }
 
 android {
@@ -29,6 +31,29 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+                    groupId = 'com.ixidev.adstoolkit'
+                    artifactId = 'core'
+                    version = '1.0'
+                    artifact('core-release') {
+                        classifier = "$buildDir/outputs/aar/core-release.aar"
+                        extension = 'aar'
+
+                    }
+                }
+            }
+            repositories {
+                mavenLocal{
+                    url =System.getProperty("user.home") + "/.m2/repository"
+                }
+            }
+        }
     }
 }
 

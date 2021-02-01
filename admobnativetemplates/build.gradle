@@ -25,6 +25,8 @@ android {
 
     lintOptions {
         resourcePrefix 'gnt_'
+        abortOnError false
+
     }
 }
 
