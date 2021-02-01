@@ -46,7 +46,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:19.7.0'
 
     implementation project(path: ':core')
-    implementation 'com.github.ixiDev.AdsToolkit:core:0.0.2'
-    implementation 'com.github.ixiDev.AdsToolkit:admob:0.0.2'
-    implementation 'com.github.ixiDev.AdsToolkit:facebook:0.0.2'
+    implementation project(path: ':facebook')
+    implementation project(path: ':admob')
+//    implementation "com.github.ixiDev.AdsToolkit:core:0.0.3"
+//    implementation "com.github.ixiDev.AdsToolkit:admob:0.0.3"
+//    implementation "com.github.ixiDev.AdsToolkit:facebook:0.0.3"
 }

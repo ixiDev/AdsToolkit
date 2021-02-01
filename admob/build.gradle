@@ -50,7 +50,8 @@ android {
             }
             repositories {
                 mavenLocal{
-                    url =System.getProperty("user.home") + "/.m2/repository"
+                  //  url =System.getProperty("user.home") + "/.m2/repository"
+                    url = "$buildDir/repo"
                 }
             }
         }
