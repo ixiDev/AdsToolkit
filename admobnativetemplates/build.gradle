@@ -40,7 +40,7 @@ plugins {
                     artifactId = 'admob'
                     version ="${AdsToolkit_VERSION}"
                     artifact('admob') {
-                        classifier = "$buildDir/outputs/aar/admob-release.aar"
+                        classifier = "$buildDir/outputs/aar/admobnativetemplates-release.aar"
                         extension = 'aar'
 
                     }
