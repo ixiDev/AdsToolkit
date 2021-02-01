@@ -19,9 +19,6 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
-        maven {
-            url System.getProperty("user.home") + "/.m2/repository"
-        }
     }
 }
 

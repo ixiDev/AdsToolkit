@@ -17,6 +17,3 @@ local.properties
 # Project exclude paths
 /admobnativetemplates/build/
 /admobnativetemplates/build/intermediates/javac/debug/classes/
-/admob/
-/admobnativetemplates/
-/app/

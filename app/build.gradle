@@ -43,12 +43,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.google.android.gms:play-services-ads:19.7.0'
+//    implementation 'com.google.android.gms:play-services-ads:19.7.0'
 
     implementation project(path: ':core')
     implementation project(path: ':facebook')
     implementation project(path: ':admob')
 //    implementation "com.github.ixiDev.AdsToolkit:core:${AdsToolkit_VERSION}"
-//    implementation "com.github.ixiDev.AdsToolkit:admob:${AdsToolkit_VERSION}@aar"
+//    implementation "com.github.ixiDev.AdsToolkit:admob:${AdsToolkit_VERSION}"
 //    implementation "com.github.ixiDev.AdsToolkit:facebook:${AdsToolkit_VERSION}"
 }
