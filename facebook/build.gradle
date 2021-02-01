@@ -36,8 +36,8 @@ android {
             publications {
                 AndroidRelease(MavenPublication) {
                     from components.release
-                    groupId = 'com.ixidev.adstoolkit'
-                    artifactId = 'facebook'
+                    groupId = 'com.github.ixiDevt'
+                    artifactId = 'adstoolkit-facebook'
                     version = '1.0'
                     artifact('facebook-release') {
                         classifier = "$buildDir/outputs/aar/facebook-release.aar"

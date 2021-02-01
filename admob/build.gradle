@@ -38,8 +38,8 @@ android {
             publications {
                 AndroidRelease(MavenPublication) {
                     from components.release
-                    groupId = 'com.ixidev.adstoolkit'
-                    artifactId = 'admob'
+                    groupId = 'com.github.ixiDev'
+                    artifactId = 'adstoolkit-admob'
                     version = '1.0'
                     artifact('admob-release') {
                         classifier = "$buildDir/outputs/aar/admob-release.aar"
