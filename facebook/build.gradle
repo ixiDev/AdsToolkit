@@ -36,10 +36,10 @@ android {
             publications {
                 AndroidRelease(MavenPublication) {
                     from components.release
-                    groupId = 'com.github.ixiDevt'
-                    artifactId = 'adstoolkit-facebook'
+                    groupId = 'com.github.ixiDevt.AdsToolkit'
+                    artifactId = 'facebook'
                     version = '1.0'
-                    artifact('facebook-release') {
+                    artifact('facebook') {
                         classifier = "$buildDir/outputs/aar/facebook-release.aar"
                         extension = 'aar'
 
@@ -47,8 +47,9 @@ android {
                 }
             }
             repositories {
-                mavenLocal{
-                    url =System.getProperty("user.home") + "/.m2/repository"
+                mavenLocal {
+                   // url = System.getProperty("user.home") + "/.m2/repository"
+                    url = "$buildDir/repo"
                 }
             }
         }

@@ -38,10 +38,10 @@ android {
             publications {
                 release(MavenPublication) {
                     from components.release
-                    groupId = 'com.github.ixiDevt'
-                    artifactId = 'adstoolkit-core'
+                    groupId = 'com.github.ixiDevt.AdsToolkit'
+                    artifactId = 'core'
                     version = '1.0'
-                    artifact('core-release') {
+                    artifact('core') {
                         classifier = "$buildDir/outputs/aar/core-release.aar"
                         extension = 'aar'
 
