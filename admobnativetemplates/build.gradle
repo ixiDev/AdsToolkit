@@ -39,7 +39,7 @@ plugins {
                     groupId = 'com.github.ixiDevt.AdsToolkit'
                     artifactId = 'admob'
                     version ="${AdsToolkit_VERSION}"
-                    artifact('admob') {
+                    artifact('admobnativetemplates') {
                         classifier = "$buildDir/outputs/aar/admobnativetemplates-release.aar"
                         extension = 'aar'
 
