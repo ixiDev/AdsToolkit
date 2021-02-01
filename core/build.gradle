@@ -36,7 +36,7 @@ android {
     afterEvaluate {
         publishing {
             publications {
-                release(MavenPublication) {
+                AndroidRelease(MavenPublication) {
                     from components.release
                     groupId = 'com.github.ixiDevt.AdsToolkit'
                     artifactId = 'core'
@@ -50,8 +50,8 @@ android {
             }
             repositories {
                 mavenLocal{
-                    //url =System.getProperty("user.home") + "/.m2/repository"
-                    url = "$buildDir/repo"
+                    url =System.getProperty("user.home") + "/.m2/repository"
+//                    url = "$buildDir/repo"
                 }
             }
         }

@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.library'
-    id 'maven-publish'
+   // id 'maven-publish'
 
 }
-    android {
+android {
     compileSdkVersion 30
 
     defaultConfig {
@@ -32,30 +32,29 @@ plugins {
 
     }
     afterEvaluate {
-        publishing {
-            publications {
-                AndroidRelease(MavenPublication) {
-                    from components.release
-                    groupId = 'com.github.ixiDevt.AdsToolkit'
-                    artifactId = 'admob'
-                    version ="${AdsToolkit_VERSION}"
-                    artifact('admobnativetemplates') {
-                        classifier = "$buildDir/outputs/aar/admobnativetemplates-release.aar"
-                        extension = 'aar'
-
-                    }
-                }
-            }
-            repositories {
-                mavenLocal{
-                    //  url =System.getProperty("user.home") + "/.m2/repository"
-                    url = "$buildDir/repo"
-                }
-            }
-        }
+//        publishing {
+//            publications {
+//                AndroidRelease(MavenPublication) {
+//                    from components.release
+//                    groupId = 'com.github.ixiDevt.AdsToolkit'
+//                    artifactId = 'admob'
+//                    version = "${AdsToolkit_VERSION}"
+//                    artifact('admobnativetemplates') {
+//                        classifier = "$buildDir/outputs/aar/admobnativetemplates-release.aar"
+//                        extension = 'aar'
+//
+//                    }
+//                }
+//            }
+//            repositories {
+//                mavenLocal {
+//                    url = System.getProperty("user.home") + "/.m2/repository"
+//                    //url = "$buildDir/repo"
+//                }
+//            }
+//        }
     }
 }
-
 
 
 dependencies {
