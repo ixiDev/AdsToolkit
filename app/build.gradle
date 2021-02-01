@@ -48,7 +48,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':facebook')
     implementation project(path: ':admob')
-//    implementation "com.github.ixiDev.AdsToolkit:core:0.0.3"
-//    implementation "com.github.ixiDev.AdsToolkit:admob:0.0.3"
-//    implementation "com.github.ixiDev.AdsToolkit:facebook:0.0.3"
+//    implementation "com.github.ixiDev.AdsToolkit:core:${AdsToolkit_VERSION}"
+//    implementation "com.github.ixiDev.AdsToolkit:admob:${AdsToolkit_VERSION}"
+//    implementation "com.github.ixiDev.AdsToolkit:facebook:${AdsToolkit_VERSION}"
 }

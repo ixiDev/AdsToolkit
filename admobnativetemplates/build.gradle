@@ -1,6 +1,9 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
 
-android {
+}
+    android {
     compileSdkVersion 30
 
     defaultConfig {
@@ -27,6 +30,29 @@ android {
         resourcePrefix 'gnt_'
         abortOnError false
 
+    }
+    afterEvaluate {
+        publishing {
+            publications {
+                AndroidRelease(MavenPublication) {
+                    from components.release
+                    groupId = 'com.github.ixiDevt.AdsToolkit'
+                    artifactId = 'admob'
+                    version ="${AdsToolkit_VERSION}"
+                    artifact('admob') {
+                        classifier = "$buildDir/outputs/aar/admob-release.aar"
+                        extension = 'aar'
+
+                    }
+                }
+            }
+            repositories {
+                mavenLocal{
+                    //  url =System.getProperty("user.home") + "/.m2/repository"
+                    url = "$buildDir/repo"
+                }
+            }
+        }
     }
 }
 
