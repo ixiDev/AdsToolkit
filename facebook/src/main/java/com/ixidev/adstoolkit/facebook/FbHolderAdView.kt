@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import com.facebook.ads.AdOptionsView
 import com.facebook.ads.MediaView
 import com.facebook.ads.NativeAd
@@ -25,7 +26,7 @@ class FbHolderAdView(@Suppress("MemberVisibilityCanBePrivate") val root: View) {
         root.findViewById(R.id.native_ad_social_context)
     private val nativeAdBody: TextView = root.findViewById(R.id.native_ad_body)
     private val sponsoredLabel: TextView = root.findViewById(R.id.native_ad_sponsored_label)
-    private val nativeAdCallToAction: Button = root.findViewById(R.id.native_ad_call_to_action)
+    private val nativeAdCallToAction: AppCompatButton = root.findViewById(R.id.native_ad_call_to_action)
     private val adChoicesContainer: LinearLayout = root.findViewById(R.id.ad_choices_container)
 
     fun bind(context: Context, nativeAd: NativeAd, nativeAdLayout: NativeAdLayout) {
