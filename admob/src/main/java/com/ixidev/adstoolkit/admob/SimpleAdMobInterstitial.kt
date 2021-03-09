@@ -7,6 +7,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ixidev.adstoolkit.core.AdsToolkit
+import com.ixidev.adstoolkit.core.FullScreenAdsListener
 import com.ixidev.adstoolkit.core.IInterstitialAd
 import com.ixidev.adstoolkit.core.OnInterstitialClosed
 
@@ -16,8 +17,6 @@ class SimpleAdMobInterstitial(private val adRequest: AdRequest.Builder) : IInter
     private var _interstitialAd: InterstitialAd? = null
     private val interstitialAd: InterstitialAd
         get() = _interstitialAd!!
-
-    private var onInterstitialClosed: OnInterstitialClosed = {}
 
     @RequiresPermission("android.permission.INTERNET")
     override fun load(context: Context, adId: String) {
@@ -46,18 +45,29 @@ class SimpleAdMobInterstitial(private val adRequest: AdRequest.Builder) : IInter
     private fun initFullScreenCallBack() {
         interstitialAd.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                onInterstitialClosed.invoke()
+                listener?.onAdDismissed()
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError?) {
-
+                listener?.onShowAdFailed(Exception(p0?.message))
             }
 
             override fun onAdShowedFullScreenContent() {
-                destroy()
+                listener?.onAdShowed()
             }
         }
     }
+
+    override fun show(activity: Activity, listener: FullScreenAdsListener) {
+        this.listener = listener
+        if (!isLoaded()) {
+            listener.onAdDismissed(false)
+            return
+        }
+        interstitialAd.show(activity)
+    }
+
+    override var listener: FullScreenAdsListener? = null
 
     override fun isLoaded(): Boolean {
         return _interstitialAd != null
@@ -67,14 +77,6 @@ class SimpleAdMobInterstitial(private val adRequest: AdRequest.Builder) : IInter
         error("Please call activity: Activity, onInterstitialClosed: OnInterstitialClosed")
     }
 
-    fun show(activity: Activity, onInterstitialClosed: OnInterstitialClosed) {
-        if (!isLoaded()) {
-            onInterstitialClosed.invoke()
-            return
-        }
-        this.onInterstitialClosed = onInterstitialClosed
-        interstitialAd.show(activity)
-    }
 
     override fun destroy() {
         _interstitialAd?.fullScreenContentCallback = null

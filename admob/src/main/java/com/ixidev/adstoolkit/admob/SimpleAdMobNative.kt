@@ -1,78 +1,197 @@
 package com.ixidev.adstoolkit.admob
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
 import androidx.annotation.RequiresPermission
-import com.google.android.ads.nativetemplates.NativeTemplateStyle
-import com.google.android.ads.nativetemplates.TemplateView
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.formats.UnifiedNativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.ixidev.adstoolkit.core.AdsToolkit
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.ixidev.adstoolkit.core.INativeAd
 
 class SimpleAdMobNative(
     private val adRequest: AdRequest.Builder,
-    private val container: FrameLayout
+    private var container: FrameLayout
 ) : INativeAd {
 
-    private var adLoader: AdLoader? = null
-    private var nativeAd: UnifiedNativeAd? = null
-    private var isAdLoaded = false
+    private var currentNativeAd: NativeAd? = null
 
+    var activityDestroyed: Boolean = false
+    var isFinishing: Boolean = false
+    var isChangingConfigurations: Boolean = false
+
+    @SuppressLint("InflateParams")
     @RequiresPermission("android.permission.INTERNET")
     override fun load(context: Context, adId: String) {
-        adLoader = AdLoader.Builder(context, adId)
-            .forUnifiedNativeAd { ad ->
-                if (adLoader?.isLoading == true) {
-                    nativeAd = null
-                } else {
-                    nativeAd = ad
-                    isAdLoaded = true
-                    render(container)
-                }
 
+        val builder = AdLoader.Builder(context, adId)
+        builder.forNativeAd { nativeAd ->
+            if (activityDestroyed || isFinishing || isChangingConfigurations) {
+                nativeAd.destroy()
+                return@forNativeAd
             }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    AdsToolkit.logD("onAdFailedToLoad: ${adError.message}")
-                }
-            })
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .build()
-            ).build()
-        adLoader?.loadAd(adRequest.build())
+            // You must call destroy on old ads when you are done with them,
+            // otherwise you will have a memory leak.
+            currentNativeAd?.destroy()
+            currentNativeAd = nativeAd
+            val adView = LayoutInflater.from(context)
+                .inflate(R.layout.ad_unified, null) as NativeAdView
+            populateNativeAdView(nativeAd, adView)
+            container.removeAllViews()
+            container.addView(adView)
+        }
+        builder.build()
+            .loadAd(adRequest.build())
     }
 
     override fun render(container: FrameLayout) {
-
-        if (!isAdLoaded())
-            return
-        val adTemplate: TemplateView = TemplateView(container.context).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-        container.addView(adTemplate)
-        val styles = NativeTemplateStyle
-            .Builder()
-            // .withMainBackgroundColor()
-            .build()
-        adTemplate.setStyles(styles)
-        adTemplate.setNativeAd(nativeAd)
-
+        this.container = container
     }
 
     override fun destroy() {
-        nativeAd?.destroy()
-        adLoader = null
-        nativeAd = null
+        currentNativeAd?.destroy()
+        currentNativeAd = null
+        activityDestroyed = true
+        container.removeAllViews()
     }
 
-    private fun isAdLoaded(): Boolean = isAdLoaded && nativeAd != null
+
+    private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
+        // Set the media view.
+        adView.mediaView = adView.findViewById(R.id.ad_media)
+
+        // Set other ad assets.
+        adView.headlineView = adView.findViewById(R.id.ad_headline)
+        adView.bodyView = adView.findViewById(R.id.ad_body)
+        adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
+        adView.iconView = adView.findViewById(R.id.ad_app_icon)
+        adView.priceView = adView.findViewById(R.id.ad_price)
+        adView.starRatingView = adView.findViewById(R.id.ad_stars)
+        adView.storeView = adView.findViewById(R.id.ad_store)
+        adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+
+        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
+        (adView.headlineView as TextView).text = nativeAd.headline
+        adView.mediaView.setMediaContent(nativeAd.mediaContent)
+
+        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+        // check before trying to display them.
+        if (nativeAd.body == null) {
+            adView.bodyView.visibility = View.INVISIBLE
+        } else {
+            adView.bodyView.visibility = View.VISIBLE
+            (adView.bodyView as TextView).text = nativeAd.body
+        }
+
+        if (nativeAd.callToAction == null) {
+            adView.callToActionView.visibility = View.INVISIBLE
+        } else {
+            adView.callToActionView.visibility = View.VISIBLE
+            (adView.callToActionView as Button).text = nativeAd.callToAction
+        }
+
+        if (nativeAd.icon == null) {
+            adView.iconView.visibility = View.GONE
+        } else {
+            (adView.iconView as ImageView).setImageDrawable(
+                nativeAd.icon.drawable
+            )
+            adView.iconView.visibility = View.VISIBLE
+        }
+
+        if (nativeAd.price == null) {
+            adView.priceView.visibility = View.INVISIBLE
+        } else {
+            adView.priceView.visibility = View.VISIBLE
+            (adView.priceView as TextView).text = nativeAd.price
+        }
+
+        if (nativeAd.store == null) {
+            adView.storeView.visibility = View.INVISIBLE
+        } else {
+            adView.storeView.visibility = View.VISIBLE
+            (adView.storeView as TextView).text = nativeAd.store
+        }
+
+        if (nativeAd.starRating == null) {
+            adView.starRatingView.visibility = View.INVISIBLE
+        } else {
+            (adView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
+            adView.starRatingView.visibility = View.VISIBLE
+        }
+
+        if (nativeAd.advertiser == null) {
+            adView.advertiserView.visibility = View.INVISIBLE
+        } else {
+            (adView.advertiserView as TextView).text = nativeAd.advertiser
+            adView.advertiserView.visibility = View.VISIBLE
+        }
+
+        // This method tells the Google Mobile Ads SDK that you have finished populating your
+        // native ad view with this native ad.
+        adView.setNativeAd(nativeAd)
+
+
+    }
+
+
+//    private var adLoader: AdLoader? = null
+//    private var nativeAd: UnifiedNativeAd? = null
+//    private var isAdLoaded = false
+//
+//    @RequiresPermission("android.permission.INTERNET")
+//    override fun load(context: Context, adId: String) {
+//        adLoader = AdLoader.Builder(context, adId)
+//            .forUnifiedNativeAd { ad ->
+//                if (adLoader?.isLoading == true) {
+//                    nativeAd = null
+//                } else {
+//                    nativeAd = ad
+//                    isAdLoaded = true
+//                    render(container)
+//                }
+//
+//            }
+//            .withAdListener(object : AdListener() {
+//                override fun onAdFailedToLoad(adError: LoadAdError) {
+//                    AdsToolkit.logD("onAdFailedToLoad: ${adError.message}")
+//                }
+//            })
+//            .withNativeAdOptions(
+//                NativeAdOptions.Builder()
+//                    .build()
+//            ).build()
+//        adLoader?.loadAd(adRequest.build())
+//    }
+//
+//    override fun render(container: FrameLayout) {
+//
+//        if (!isAdLoaded())
+//            return
+//        val adTemplate: TemplateView = TemplateView(container.context).apply {
+//            layoutParams = FrameLayout.LayoutParams(
+//                FrameLayout.LayoutParams.WRAP_CONTENT,
+//                FrameLayout.LayoutParams.WRAP_CONTENT
+//            )
+//        }
+//        container.addView(adTemplate)
+//        val styles = NativeTemplateStyle
+//            .Builder()
+//            // .withMainBackgroundColor()
+//            .build()
+//        adTemplate.setStyles(styles)
+//        adTemplate.setNativeAd(nativeAd)
+//
+//    }
+//
+//    override fun destroy() {
+//        nativeAd?.destroy()
+//        adLoader = null
+//        nativeAd = null
+//    }
+//
+//    private fun isAdLoaded(): Boolean = isAdLoaded && nativeAd != null
 }

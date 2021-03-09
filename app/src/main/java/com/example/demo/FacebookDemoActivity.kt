@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
+import com.ixidev.adstoolkit.core.FullScreenAdsListener
 import com.ixidev.adstoolkit.core.IBannerAd
 import com.ixidev.adstoolkit.core.IInterstitialAd
 import com.ixidev.adstoolkit.core.INativeAd
@@ -13,7 +14,7 @@ import com.ixidev.adstoolkit.facebook.SimpleFacebookBannerAd
 import com.ixidev.adstoolkit.facebook.SimpleFacebookInterstitialAd
 import com.ixidev.adstoolkit.facebook.SimpleFacebookNativeAd
 
-class FacebookDemoActivity : AppCompatActivity() {
+class FacebookDemoActivity : AppCompatActivity(), FullScreenAdsListener {
 
     private lateinit var banner: IBannerAd
     private lateinit var interstitialAd: IInterstitialAd
@@ -47,8 +48,19 @@ class FacebookDemoActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun showFullScreenAd(view: View) {
-        interstitialAd.show {
-            Toast.makeText(this, "Ad closed or not loaded", Toast.LENGTH_SHORT).show()
-        }
+        interstitialAd.show(this, this)
+    }
+
+    override fun onAdDismissed(isShowed: Boolean) {
+        if (isShowed)
+            Toast.makeText(this, "Ad closed", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onShowAdFailed(error: Exception) {
+        Toast.makeText(this, "${error.message}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onAdShowed() {
+        Toast.makeText(this, "Ad displayed", Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.ixidev.adstoolkit.core
 
+import android.app.Activity
 import android.content.Context
 import androidx.annotation.RequiresPermission
 
@@ -12,6 +13,9 @@ import androidx.annotation.RequiresPermission
 typealias OnInterstitialClosed = () -> Unit
 
 interface IInterstitialAd {
+
+    var listener: FullScreenAdsListener?
+
     /**
      * Load and init banner ad
      * @param context : activity context
@@ -20,6 +24,12 @@ interface IInterstitialAd {
     @RequiresPermission("android.permission.INTERNET")
     fun load(context: Context, adId: String)
     fun isLoaded(): Boolean
+
+    @Deprecated(
+        "",
+        replaceWith = ReplaceWith("show(activity: Activity, listener: FullScreenAdsListener)")
+    )
     fun show(onInterstitialClosed: OnInterstitialClosed)
+    fun show(activity: Activity, listener: FullScreenAdsListener)
     fun destroy()
 }

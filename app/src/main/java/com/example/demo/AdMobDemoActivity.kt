@@ -11,10 +11,11 @@ import com.google.android.gms.ads.RequestConfiguration
 import com.ixidev.adstoolkit.admob.SimpleAdMobBanner
 import com.ixidev.adstoolkit.admob.SimpleAdMobInterstitial
 import com.ixidev.adstoolkit.admob.SimpleAdMobNative
+import com.ixidev.adstoolkit.core.FullScreenAdsListener
 
 private const val TAG = "AdMobDemoActivity"
 
-class AdMobDemoActivity : AppCompatActivity() {
+class AdMobDemoActivity : AppCompatActivity(), FullScreenAdsListener {
 
     private lateinit var bannerAd: SimpleAdMobBanner
     private lateinit var interstitial: SimpleAdMobInterstitial
@@ -62,9 +63,7 @@ class AdMobDemoActivity : AppCompatActivity() {
     }
 
     fun showFullScreenAd(@Suppress("UNUSED_PARAMETER") view: View) {
-        interstitial.show(this) {
-            Toast.makeText(this, "ad closed", Toast.LENGTH_SHORT).show()
-        }
+        interstitial.show(this, this)
     }
 
 
@@ -82,4 +81,18 @@ class AdMobDemoActivity : AppCompatActivity() {
         super.onResume()
         bannerAd.onResume()
     }
+
+    override fun onAdDismissed(isShowed: Boolean) {
+        if (isShowed)
+            Toast.makeText(this, "ad closed", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onShowAdFailed(error: Exception) {
+        Toast.makeText(this, "${error.message}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onAdShowed() {
+        Toast.makeText(this, "ad displayed", Toast.LENGTH_SHORT).show()
+    }
+
 }
