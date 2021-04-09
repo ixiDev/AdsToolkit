@@ -8,7 +8,6 @@ import com.facebook.ads.InterstitialAd
 import com.facebook.ads.InterstitialAdListener
 import com.ixidev.adstoolkit.core.FullScreenAdsListener
 import com.ixidev.adstoolkit.core.IInterstitialAd
-import com.ixidev.adstoolkit.core.OnInterstitialClosed
 
 /**
  * Created by ABDELMAJID ID ALI on 1/23/21.
@@ -40,13 +39,7 @@ class SimpleFacebookInterstitialAd : IInterstitialAd, InterstitialAdListener {
         return _interstitialAd != null && interstitialAd.isAdLoaded && !interstitialAd.isAdInvalidated && this.loaded
     }
 
-    @Deprecated(
-        "",
-        replaceWith = ReplaceWith("show(activity: Activity, listener: FullScreenAdsListener)")
-    )
-    override fun show(onInterstitialClosed: OnInterstitialClosed) {
 
-    }
 
     override fun destroy() {
         _interstitialAd?.destroy()

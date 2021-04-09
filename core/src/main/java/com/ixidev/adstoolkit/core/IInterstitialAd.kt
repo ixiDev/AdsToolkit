@@ -25,11 +25,6 @@ interface IInterstitialAd {
     fun load(context: Context, adId: String)
     fun isLoaded(): Boolean
 
-    @Deprecated(
-        "",
-        replaceWith = ReplaceWith("show(activity: Activity, listener: FullScreenAdsListener)")
-    )
-    fun show(onInterstitialClosed: OnInterstitialClosed)
     fun show(activity: Activity, listener: FullScreenAdsListener)
     fun destroy()
 }

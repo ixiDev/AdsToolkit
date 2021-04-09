@@ -12,9 +12,13 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.ixidev.adstoolkit.core.INativeAd
 
-class SimpleAdMobNative(
-    private val adRequest: AdRequest.Builder,
-    private var container: FrameLayout
+/**
+ * Created by ABDELMAJID ID ALI on 3/19/21.
+ * Email : abdelmajid.idali@gmail.com
+ * Github : https://github.com/ixiDev
+ */
+class RecyclerViewAdmobNativeAd(
+    private val adRequest: AdRequest.Builder
 ) : INativeAd {
 
     private var currentNativeAd: NativeAd? = null
@@ -22,6 +26,7 @@ class SimpleAdMobNative(
     var activityDestroyed: Boolean = false
     var isFinishing: Boolean = false
     var isChangingConfigurations: Boolean = false
+    private var container: FrameLayout? = null
 
     @SuppressLint("InflateParams")
     @RequiresPermission("android.permission.INTERNET")
@@ -37,25 +42,32 @@ class SimpleAdMobNative(
             // otherwise you will have a memory leak.
             currentNativeAd?.destroy()
             currentNativeAd = nativeAd
-            val adView = LayoutInflater.from(context)
-                .inflate(R.layout.ad_unified, null) as NativeAdView
-            populateNativeAdView(nativeAd, adView)
-            container.removeAllViews()
-            container.addView(adView)
+            inflateNativeAd()
         }
         builder.build()
             .loadAd(adRequest.build())
     }
 
+    private fun inflateNativeAd() {
+        if (container == null || currentNativeAd == null)
+            return
+        val adView = LayoutInflater.from(this.container!!.context)
+            .inflate(R.layout.ad_unified, null) as NativeAdView
+        populateNativeAdView(this.currentNativeAd!!, adView)
+        this.container!!.removeAllViews()
+        this.container!!.addView(adView)
+    }
+
     override fun render(container: FrameLayout) {
         this.container = container
+        inflateNativeAd()
     }
 
     override fun destroy() {
         currentNativeAd?.destroy()
         currentNativeAd = null
         activityDestroyed = true
-        container.removeAllViews()
+        container?.removeAllViews()
     }
 
 

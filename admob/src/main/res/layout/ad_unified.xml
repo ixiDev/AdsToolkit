@@ -1,4 +1,5 @@
 <com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -122,12 +123,18 @@
                         android:paddingRight="5dp"
                         android:textSize="12sp" />
 
-                    <Button
+
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/ad_call_to_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textSize="12sp" />
+                        android:background="#4286F4"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        tools:text="Install"
+                        tools:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
